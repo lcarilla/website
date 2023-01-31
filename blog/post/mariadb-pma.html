@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Install MariaDB and PhpMyAdmin on Debian 11</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../assets/static/code.css">
+    <script src="../assets/static/code.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+  <div class="navbar">
+        <a href="../" class="caption">BLOG - LUIS CARILLA</a>
+  </div>      
+    <div class="blog">
+        <div class="blogtitle-div"><a class="blogtitle">Install MariaDB and PhpMyAdmin on Debian 11</a></div>
+        <div class="blogintro-div">
+        <a class="blogintro">This guide assumes that you have installed Debian 11 with the Apache Web server</a>
+        </div>
+        <div class="blogcontent">
+        <a class="bc-header">After you have connected to your server, install MariaDB and enable it</a>
+<pre><code>
+apt install mariadb-server
+systemctl enable --now mariadb  
+
+</code></pre><a class="bc-header">Setting Up MariaDB</a><a class="blogcontentelem">Now enter this command in your terminal to configure your MariaDB instance and select your settings</a>
+<pre><code>
+mysql_secure_installation  
+
+</code></pre><a class="bc-header">Set up a database user</a><a class="blogcontentelem">Run the mariadb command to be able to communcate with the DBMS</a>
+<pre><code>
+mariadb  
+
+</code></pre><a class="blogcontentelem">Then create a new user and grant all privileges to them</a>
+<pre><code>
+CREATE USER 'admin'@'%';
+GRANT ALL ON *.* TO 'admin'@'%' IDENTIFIED BY 'password' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+exit;  
+
+</code></pre><a class="bc-header">PMA install</a><a class="blogcontentelem">Install the dependecies</a>
+<pre><code>
+apt install wget php php-cgi php-mysqli php-pear php-mbstring libapache2-mod-php php-common php-phpseclib php-mysql  
+
+</code></pre><a class="blogcontentelem">Then install PMA itself</a>
+<pre><code>
+apt install phpmyadmin  
+
+</code></pre><a class="blogcontentelem">Select the Apache Webserver if a prompt from the installer pops up</a><a class="blogcontentelem">You should have PhpMyAdmin running on your webserver (example.com/phpmyadmin) now</a>
+        </div>
+    </div>
+  </div>
+  <div class="copyright">Copyright 2023 by harald.ga - Luis Carilla Ternero --- powered by haraldBlog.js</div>
+</body>
+</html>

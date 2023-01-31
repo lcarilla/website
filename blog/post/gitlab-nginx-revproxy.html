@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitLab behind a reverse proxy</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../assets/static/code.css">
+    <script src="../assets/static/code.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+  <div class="navbar">
+        <a href="../" class="caption">BLOG - LUIS CARILLA</a>
+  </div>      
+    <div class="blog">
+        <div class="blogtitle-div"><a class="blogtitle">GitLab behind a reverse proxy</a></div>
+        <div class="blogintro-div">
+        <a class="blogintro">I have used Debian 11 for the nginx server but this shsould also work on other operating systems</a>
+        </div>
+        <div class="blogcontent">
+        <a class="bc-header">Install and enable nginx</a><a class="blogcontentelem">SSH into your server and execute the following commands to install and enable nginx</a>
+<pre><code>
+apt install nginx
+systemctl enable nginx --now  
+
+</code></pre><a class="bc-header">Edit the nginx config file</a><a class="blogcontentelem">Open up /etc/nginx/sites-available/default with your favorite text editor</a><a class="blogcontentelem">Add the following lines to proxy the /gitlab Path to your GitLab server</a>
+<pre><code>
+location /gitlab {
+    proxy_pass http://gitlab-ip-or-domain;
+}  
+
+</code></pre><a class="blogcontentelem">Then restart nginx</a>
+<pre><code>
+systemctl restart nginx  
+
+</code></pre><a class="blogcontentelem">You should be able to reach the GitLab instance at /gitlab on your nginx proxy</a><a class="bc-header">Configure the external URL on your GitLab server</a><a class="blogcontentelem">Add this line to /etc/gitlab/gitlab.rb</a>
+<pre><code>
+external_url 'http://your.domain/gitlab'  
+
+</code></pre><a class="blogcontentelem">Do not forget to reconfiguring your server after that</a>
+<pre><code>
+gitlab-ctl reconfigure  
+
+</code></pre><a class="blogcontentelem">You should now be able to acces your GitLab instance over nginx</a>
+        </div>
+    </div>
+  </div>
+  <div class="copyright">Copyright 2023 by harald.ga - Luis Carilla Ternero --- powered by haraldBlog.js</div>
+</body>
+</html>
