@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL/TLS on DynDNS using nginx and certbot</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="../assets/static/code.css">
+    <script src="../assets/static/code.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+  <div class="navbar">
+        <a href="../" class="caption">BLOG - LUIS CARILLA</a>
+  </div>      
+    <div class="blog">
+        <div class="blogtitle-div"><a class="blogtitle">SSL/TLS on DynDNS using nginx and certbot</a></div>
+        <div class="blogintro-div">
+        <a class="blogintro">This guide assumes that you have the nginx web server/reverese proxy installed</a>
+        </div>
+        <div class="blogcontent">
+        <a class="bc-header">Set up a server block for your DynDNS domain</a><a class="blogcontentelem">if you have already set that up, feel free to skip to the next section</a><a class="blogcontentelem">Create a directory for your domain</a>
+<pre><code>
+mkdir -p /var/www/your-dyn.dns.domain/html  
+
+</code></pre><a class="blogcontentelem">Let's write somthing to the index.html of your server block to be able to test the setup later</a>
+<pre><code>
+echo 'test' > /var/www/your-dyn.dns.domain/html/index.html  
+
+</code></pre><a class="blogcontentelem">Open up/create the nginx config file your your server block (/etc/nginx/sites-available/your-dyn.dns.domain) and copy the following</a>
+<pre><code>
+server {
+        listen 80;
+        listen [::]:80;
+
+        root /var/www/your-dyn.dns.domain/html;
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name your-dyn.dns.domain;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}  
+
+</code></pre><a class="blogcontentelem">Create a symlink to enable the server block</a>
+<pre><code>
+ln -s /etc/nginx/sites-available/your-dyn.dns.domain /etc/nginx/sites-enabled/  
+
+</code></pre><a class="bc-header">Install certbot</a><a class="blogcontentelem">Execute the following command to install certbot and the library for nginx</a>
+<pre><code>
+apt install certbot python3-certbot-nginx  
+
+</code></pre><a class="bc-header">Get and install the SSL certificate for your domain</a>
+<pre><code>
+certbot --nginx -d your-dyn.dns.domain  
+
+</code></pre><a class="blogcontentelem">Then restart nginx</a>
+<pre><code>
+systemctl restart nginx  
+
+</code></pre><a class="blogcontentelem">Your website should be up and running on Port 443 of your web server</a><a class="blogcontentelem">Note: In case you want to renew your SSL cert manually, you can do it by running this command</a>
+<pre><code>
+certbot renew --dry-run  
+
+</code></pre>
+        </div>
+    </div>
+  </div>
+  <div class="copyright">Copyright 2023 by harald.ga - Luis Carilla Ternero --- powered by haraldBlog.js</div>
+</body>
+</html>
